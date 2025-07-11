@@ -1,4 +1,4 @@
-$(document).ready(function () {
+
   const popupFormEditMark = $('#popup');
   let currentWatermark = null;
 
@@ -13,48 +13,79 @@ $(document).ready(function () {
 
   const dateStr = `${yyyy}-${mmNum}-${dd}`;
   const timeStr = `${hh}:${mm}`;
-  const dayName = getIndonesianDayName(dateStr);
+
   const waktuSekarang = `${hh}-${mm}-${dateStr}`;
+  const overlay = $(`
+    <div class="spinner-overlay">
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="spinner"></div>
+        <div class="spinner-text">0%</div>
+      </div>
+    </div>
+  `);
 
-  console.log(waktuSekarang);
+ async function handleDownloadImage(wrapperElement, index, button, waktuSekarang) {
 
-  // Set nilai default di form popup
+  try {
+    button.prop('disabled', true).text('Memproses...');
+    button.hide();
+    wrapperElement.style.display = 'none';
+    wrapperElement.offsetHeight;
+    wrapperElement.style.display = '';
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+
+    const canvas = await html2canvas(wrapperElement, {
+      useCORS: true,
+      backgroundColor: null
+    });
+
+
+
+    const blob = await new Promise((resolve, reject) => {
+      canvas.toBlob(blob => {
+        if (blob) resolve(blob);
+        else reject(new Error('Gagal membuat blob'));
+      }, 'image/jpeg');
+    });
+
+    await new Promise(resolve => setTimeout(resolve, 300)); // delay biar terlihat
+
+    saveAs(blob, `patroli_${index + 1}_${waktuSekarang}.jpg`);
+  } catch (err) {
+    console.error(err);
+    alert('Terjadi kesalahan: ' + err.message);
+  } finally {
+      button.show();
+    button.prop('disabled', false).text('Download');
+    overlay.remove(); // hapus spinner
+  }
+}
+
+$(document).ready(function () {
+  const dayName = getIndonesianDayName(dateStr);
   $('#input-date').val(dateStr);
   $('#input-time').val(timeStr);
   $('#input-day').val(dayName);
 
-  // Set watermark default dari template utama
   const $defaultBox = $('.marki-box');
-  updateMarkiBoxContent($defaultBox, {
-    time: timeStr,
-    date: dateStr,
-    day: dayName
-  });
+  updateMarkiBoxContent($defaultBox, { time: timeStr, date: dateStr, day: dayName });
 
-  // Update nama hari saat tanggal diubah
   $('#input-date').on('change', function () {
-    const selectedDate = $(this).val();
-    $('#input-day').val(getIndonesianDayName(selectedDate));
+    $('#input-day').val(getIndonesianDayName($(this).val()));
   });
 
-  // Toggle sembunyikan/lihat petugas
   $('#hidePetugas').on('change', function () {
-    const isChecked = $(this).prop('checked');
-    if (isChecked) {
-      $('.handler-section').hide();
-    } else {
-      $('.handler-section').show();
-    }
+    $('.handler-section').toggle(!$(this).is(':checked'));
   });
 
-  // Upload gambar
   $('#upload').on('change', function (e) {
     const files = e.target.files;
     if (!files.length) return;
 
-    $('#output-container').html('');
-
-    Array.from(files).forEach((file) => {
+    $('#output-container').empty();
+    $('#download-image').show()
+    Array.from(files).forEach((file, index) => {
       if (!file.type.startsWith('image/')) return;
 
       const reader = new FileReader();
@@ -65,7 +96,33 @@ $(document).ready(function () {
         img.style.display = 'block';
 
         const wrapper = $('<div class="image-wrapper" style="position:relative; margin-bottom:15px;"></div>');
-        wrapper.append(img);
+        wrapper.attr('data-index', index).append(img);
+
+        // ✅ Tombol download per gambar
+        const downloadBtn = $(`
+          <button class="per-image-download-btn" title="Download gambar ini"
+            style="
+              position: absolute;
+              top: 10px;
+              right: 10px;
+              z-index: 10;
+              background: #darkgrey;
+              color: black;
+              border: none;
+              border-radius: 5px;
+              padding: 4px 8px;
+              cursor: pointer;
+              font-size: 12px;
+            ">
+            Download
+          </button>
+        `);
+
+// ✅ Versi Promise chaining yang aman & terstruktur
+downloadBtn.on('click', function () {
+  handleDownloadImage(wrapper[0], index, $(this), waktuSekarang);
+});
+        wrapper.append(downloadBtn);
 
         const watermark = $('.marki-box').clone().removeAttr('id').addClass('marki-box-clone');
         watermark.css({
@@ -76,11 +133,7 @@ $(document).ready(function () {
           cursor: 'pointer'
         });
 
-        updateMarkiBoxContent(watermark, {
-          date: dateStr,
-          time: timeStr,
-          day: dayName
-        });
+        updateMarkiBoxContent(watermark, { date: dateStr, time: timeStr, day: dayName });
 
         watermark.on('click', function () {
           currentWatermark = $(this);
@@ -90,65 +143,67 @@ $(document).ready(function () {
           $('#input-day').val(currentData.day);
           $('#input-location').val(currentData.location);
           $('#input-handler').val(currentData.handler);
-          $('#popup').css('display', 'flex');
+          popupFormEditMark.css('display', 'flex');
         });
 
         wrapper.append(watermark);
         $('#output-container').append(wrapper);
-        $('#download-image').show();
       };
+
       reader.readAsDataURL(file);
     });
   });
 
-  // Terapkan perubahan watermark dari popup
-  $('#apply-marki').click(function () {
+  $('#apply-marki').on('click', function () {
     if (!currentWatermark) return alert('Tidak ada watermark yang dipilih.');
     updateMarkiBoxContent(currentWatermark, getFormData());
-    $('#popup').hide();
+    popupFormEditMark.hide();
     currentWatermark = null;
   });
 
-  // Batal edit watermark
-  $('#cancel-button').click(function () {
-    $('#popup').hide();
+  $('#cancel-button').on('click', function () {
+    popupFormEditMark.hide();
     currentWatermark = null;
   });
 
-  // Unduh ZIP berisi semua gambar
-  $('#download-image').click(async function () {
-    $('#loading').show();
-
+  $('#download-image').on('click', async function () {
+      $("body").append(overlay);
+      $(".per-image-download-btn").hide();
+      spinText = overlay.find('.spinner-text');
+    spinText.text("10%");
     const zip = new JSZip();
     const folder = zip.folder("patroli-images-" + waktuSekarang);
-
     const wrappers = $('.image-wrapper').toArray();
 
     for (let i = 0; i < wrappers.length; i++) {
       const canvas = await html2canvas(wrappers[i]);
-      const dataUrl = canvas.toDataURL('image/png');
+      const dataUrl = canvas.toDataURL('image/jpeg');
+      const persen = Math.round(((i + 1) / wrappers.length) * 90);
+      spinText.text(persen + "%");
+
       const imgData = dataUrl.split(',')[1];
-      folder.file(`patroli_${i + 1}.png`, imgData, { base64: true });
+      folder.file(`patroli_${i + 1}.jpg`, imgData, { base64: true });
     }
 
     zip.generateAsync({ type: 'blob' }).then(function (content) {
       saveAs(content, "patroli-foto-" + waktuSekarang + ".zip");
-      $('#loading').hide();
+      spinText.text("100%");
+      overlay.remove();
+      $(".per-image-download-btn").show();
+
     });
   });
 
-  // Fungsi: Isi watermark
   function updateMarkiBoxContent($box, options = {}) {
     if (options.time) {
-      const [hh, mm] = options.time.split(':');
-      $box.find('.jam').text(hh);
-      $box.find('.menit').text(mm);
+      const [jam, menit] = options.time.split(':');
+      $box.find('.jam').text(jam);
+      $box.find('.menit').text(menit);
     }
 
     if (options.date) {
       const [yyyy, mm, dd] = options.date.split('-');
-      const tglFormat = `${dd}-${mm}-${yyyy}`;
-      $box.find('.column.small-text div').eq(0).text(tglFormat);
+      $box.find('.column.small-text div').eq(0).text(`${dd}-${mm}-${yyyy}`);
     }
 
     if (options.day) {
@@ -164,27 +219,20 @@ $(document).ready(function () {
     }
   }
 
-  // Fungsi: Ambil data dari watermark
   function extractWatermarkData($box) {
     const jam = $box.find('.jam').text();
     const menit = $box.find('.menit').text();
-    const dateText = $box.find('.column.small-text div').eq(0).text();
-    const [dd, mm, yyyy] = dateText.split('-');
+    const [dd, mm, yyyy] = $box.find('.column.small-text div').eq(0).text().split('-');
     const date = `${yyyy}-${mm}-${dd}`;
-    const day = $box.find('.column.small-text div').eq(1).text();
-    const location = $box.find('.location-view').text();
-    const handler = $box.find('.note-view').text();
-
     return {
       time: `${jam}:${menit}`,
       date,
-      day,
-      location,
-      handler
+      day: $box.find('.column.small-text div').eq(1).text(),
+      location: $box.find('.location-view').text(),
+      handler: $box.find('.note-view').text()
     };
   }
 
-  // Fungsi: Ambil data dari form popup
   function getFormData() {
     return {
       time: $('#input-time').val() || '00:00',
@@ -195,11 +243,9 @@ $(document).ready(function () {
     };
   }
 
-  // Fungsi: Nama hari dalam Bahasa Indonesia
   function getIndonesianDayName(dateStr) {
     const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
     const date = new Date(dateStr);
-    if (isNaN(date)) return 'Hari';
-    return days[date.getDay()];
+    return isNaN(date) ? 'Hari' : days[date.getDay()];
   }
 });
