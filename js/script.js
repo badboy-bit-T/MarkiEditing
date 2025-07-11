@@ -1,32 +1,35 @@
+const popupFormEditMark = $('#popup');
+let currentWatermark = null;
 
-  const popupFormEditMark = $('#popup');
-  let currentWatermark = null;
+const pad = n => n.toString().padStart(2, '0');
 
-  const pad = n => n.toString().padStart(2, '0');
+const now = new Date();
+const hh = pad(now.getHours());
+const mm = pad(now.getMinutes());
+const yyyy = now.getFullYear();
+const mmNum = pad(now.getMonth() + 1);
+const dd = pad(now.getDate());
 
-  const now = new Date();
-  const hh = pad(now.getHours());
-  const mm = pad(now.getMinutes());
-  const yyyy = now.getFullYear();
-  const mmNum = pad(now.getMonth() + 1);
-  const dd = pad(now.getDate());
+const dateStr = `${yyyy}-${mmNum}-${dd}`;
+const timeStr = `${hh}:${mm}`;
+const waktuSekarang = `${hh}-${mm}-${dateStr}`;
 
-  const dateStr = `${yyyy}-${mmNum}-${dd}`;
-  const timeStr = `${hh}:${mm}`;
-
-  const waktuSekarang = `${hh}-${mm}-${dateStr}`;
-  const overlay = $(`
-    <div class="spinner-overlay">
-      <div style="display: flex; flex-direction: column; align-items: center;">
-        <div class="spinner"></div>
-        <div class="spinner-text">0%</div>
-      </div>
+const overlay = $(`
+  <div class="spinner-overlay">
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <div class="spinner"></div>
+      <div class="spinner-text">0%</div>
     </div>
-  `);
+  </div>
+`);
 
- async function handleDownloadImage(wrapperElement, index, button, waktuSekarang) {
-
+async function handleDownloadImage(wrapperElement, index, button, waktuSekarang) {
+  let spinText;
   try {
+    $("body").append(overlay);
+    spinText = overlay.find('.spinner-text');
+    spinText.text("Memproses...");
+    
     button.prop('disabled', true).text('Memproses...');
     button.hide();
     wrapperElement.style.display = 'none';
@@ -34,13 +37,10 @@
     wrapperElement.style.display = '';
     await new Promise(resolve => setTimeout(resolve, 100));
 
-
     const canvas = await html2canvas(wrapperElement, {
       useCORS: true,
       backgroundColor: null
     });
-
-
 
     const blob = await new Promise((resolve, reject) => {
       canvas.toBlob(blob => {
@@ -49,16 +49,15 @@
       }, 'image/jpeg');
     });
 
-    await new Promise(resolve => setTimeout(resolve, 300)); // delay biar terlihat
-
+    await new Promise(resolve => setTimeout(resolve, 300));
     saveAs(blob, `patroli_${index + 1}_${waktuSekarang}.jpg`);
   } catch (err) {
     console.error(err);
     alert('Terjadi kesalahan: ' + err.message);
   } finally {
-      button.show();
+    button.show();
     button.prop('disabled', false).text('Download');
-    overlay.remove(); // hapus spinner
+    overlay.remove();
   }
 }
 
@@ -84,7 +83,7 @@ $(document).ready(function () {
     if (!files.length) return;
 
     $('#output-container').empty();
-    $('#download-image').show()
+    $('#download-image').show();
     Array.from(files).forEach((file, index) => {
       if (!file.type.startsWith('image/')) return;
 
@@ -98,7 +97,6 @@ $(document).ready(function () {
         const wrapper = $('<div class="image-wrapper" style="position:relative; margin-bottom:15px;"></div>');
         wrapper.attr('data-index', index).append(img);
 
-        // ✅ Tombol download per gambar
         const downloadBtn = $(`
           <button class="per-image-download-btn" title="Download gambar ini"
             style="
@@ -106,7 +104,7 @@ $(document).ready(function () {
               top: 10px;
               right: 10px;
               z-index: 10;
-              background: #darkgrey;
+              background: darkgrey;
               color: black;
               border: none;
               border-radius: 5px;
@@ -118,10 +116,9 @@ $(document).ready(function () {
           </button>
         `);
 
-// ✅ Versi Promise chaining yang aman & terstruktur
-downloadBtn.on('click', function () {
-  handleDownloadImage(wrapper[0], index, $(this), waktuSekarang);
-});
+        downloadBtn.on('click', function () {
+          handleDownloadImage(wrapper[0], index, $(this), waktuSekarang);
+        });
         wrapper.append(downloadBtn);
 
         const watermark = $('.marki-box').clone().removeAttr('id').addClass('marki-box-clone');
@@ -156,7 +153,13 @@ downloadBtn.on('click', function () {
 
   $('#apply-marki').on('click', function () {
     if (!currentWatermark) return alert('Tidak ada watermark yang dipilih.');
-    updateMarkiBoxContent(currentWatermark, getFormData());
+    const data = getFormData();
+    updateMarkiBoxContent(currentWatermark, data);
+    
+    // 🔁 Samakan nama petugas di semua watermark
+    $('.marki-box-clone .note-view').text(data.handler);
+    $('.marki-box .note-view').text(data.handler); // jika watermark default juga ingin diubah
+    
     popupFormEditMark.hide();
     currentWatermark = null;
   });
@@ -167,22 +170,27 @@ downloadBtn.on('click', function () {
   });
 
   $('#download-image').on('click', async function () {
-      $("body").append(overlay);
-      $(".per-image-download-btn").hide();
-      spinText = overlay.find('.spinner-text');
+    $("body").append(overlay);
+    let spinText = overlay.find('.spinner-text');
     spinText.text("10%");
+    $(".per-image-download-btn").hide();
+
     const zip = new JSZip();
     const folder = zip.folder("patroli-images-" + waktuSekarang);
     const wrappers = $('.image-wrapper').toArray();
 
     for (let i = 0; i < wrappers.length; i++) {
-      const canvas = await html2canvas(wrappers[i]);
-      const dataUrl = canvas.toDataURL('image/jpeg');
-      const persen = Math.round(((i + 1) / wrappers.length) * 90);
-      spinText.text(persen + "%");
+      try {
+        const canvas = await html2canvas(wrappers[i]);
+        const dataUrl = canvas.toDataURL('image/jpeg');
+        const persen = Math.round(((i + 1) / wrappers.length) * 90);
+        spinText.text(persen + "%");
 
-      const imgData = dataUrl.split(',')[1];
-      folder.file(`patroli_${i + 1}.jpg`, imgData, { base64: true });
+        const imgData = dataUrl.split(',')[1];
+        folder.file(`patroli_${i + 1}.jpg`, imgData, { base64: true });
+      } catch (e) {
+        console.error(`Gagal memproses gambar ke-${i + 1}:`, e);
+      }
     }
 
     zip.generateAsync({ type: 'blob' }).then(function (content) {
@@ -190,7 +198,6 @@ downloadBtn.on('click', function () {
       spinText.text("100%");
       overlay.remove();
       $(".per-image-download-btn").show();
-
     });
   });
 
