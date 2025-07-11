@@ -10,6 +10,13 @@ const urlsToCache = [
   "/img/water_icon_validated.png",
   "/img/water_security1_subject_bg.png",
   "/img/water_security_patrol_bg.png",
+  "/img/web-app-manifest-512x512.png", 
+  "img/web-app-manifest-192x192.png", 
+  "site.webmanifest", 
+  "apple-touch-icon.png", 
+  "favicon-96x96.png", 
+  "favicon.ico", 
+  "favicon.svg", 
   "/font/BloggersansBold.ttf"
 ];
 
