@@ -13,7 +13,7 @@
     "type": "image/png"
   },
   {
-    "src": "img/web-app-manifest-512-512.png",
+    "src": "img/web-app-manifest-512x512.png",
     "sizes": "512x512",
     "type": "image/png"
   }]
