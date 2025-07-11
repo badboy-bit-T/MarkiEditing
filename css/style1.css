@@ -229,7 +229,8 @@ h1,h2,h3,h4{
 
 .save-button {
     margin: 10px;
-    background-color: #444f40;
+    background-color: red;
+    padding: 10px 15px;
 }
 
 .upload-label:hover {
