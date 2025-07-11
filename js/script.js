@@ -14,6 +14,10 @@ $(document).ready(function () {
   const timeStr = `${hh}:${mm}`;
   const dayName = getIndonesianDayName(dateStr);
 
+const waktuSekarang = `${hh}-${mm}-${dateStr}`;
+
+console.log(waktuSekarang); // Contoh output: "14-05-11-07-2025"
+
   // ⏱️ Set default nilai pada popup form
   $('#input-date').val(dateStr);
   $('#input-time').val(timeStr);
@@ -109,24 +113,26 @@ $(document).ready(function () {
   });
 
   // ✅ Download ZIP berisi semua gambar
-  $('#download-image').click(async function () {
-    const zip = new JSZip();
-    const folder = zip.folder("patroli_images");
+$('#download-image').click(async function () {
+  $('#loading').show();
 
-    const wrappers = $('.image-wrapper').toArray();
+  const zip = new JSZip();
+  const folder = zip.folder("patroli-images-"+ waktuSekarang ");
 
-    for (let i = 0; i < wrappers.length; i++) {
-      const canvas = await html2canvas(wrappers[i]);
-      const dataUrl = canvas.toDataURL('image/png');
-      const imgData = dataUrl.split(',')[1];
-      folder.file(`patroli_${i + 1}.png`, imgData, { base64: true });
-    }
+  const wrappers = $('.image-wrapper').toArray();
 
-    zip.generateAsync({ type: 'blob' }).then(function (content) {
-      saveAs(content, "patroli_foto.zip");
-    });
+  for (let i = 0; i < wrappers.length; i++) {
+    const canvas = await html2canvas(wrappers[i]);
+    const dataUrl = canvas.toDataURL('image/png');
+    const imgData = dataUrl.split(',')[1];
+    folder.file(`patroli_${i + 1}.png`, imgData, { base64: true });
+  }
+    
+  zip.generateAsync({ type: 'blob' }).then(function (content) {
+    saveAs(content, "patroli-foto-"+ waktuSekarang +".zip");
+    $('#loading').hide();
   });
-
+});
   function updateMarkiBoxContent($box, options = {}) {
     if (options.time) {
       const [hh, mm] = options.time.split(':');
