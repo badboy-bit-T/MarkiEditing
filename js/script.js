@@ -84,6 +84,7 @@ $(document).ready(function () {
 
     $('#output-container').empty();
     $('#download-image').show();
+    $('.upload-label').css('right', '50px')
     Array.from(files).forEach((file, index) => {
       if (!file.type.startsWith('image/')) return;
 
@@ -171,34 +172,17 @@ $(document).ready(function () {
 
   $('#download-image').on('click', async function () {
     $("body").append(overlay);
-    let spinText = overlay.find('.spinner-text');
-    spinText.text("10%");
-    $(".per-image-download-btn").hide();
+    const myBtn = $('.per-image-download-btn');
 
-    const zip = new JSZip();
-    const folder = zip.folder("patroli-images-" + waktuSekarang);
-    const wrappers = $('.image-wrapper').toArray();
-
-    for (let i = 0; i < wrappers.length; i++) {
+    for (let i = 0; i < myBtn.length; i++) {
       try {
-        const canvas = await html2canvas(wrappers[i]);
-        const dataUrl = canvas.toDataURL('image/jpeg');
-        const persen = Math.round(((i + 1) / wrappers.length) * 90);
-        spinText.text(persen + "%");
-
-        const imgData = dataUrl.split(',')[1];
-        folder.file(`patroli_${i + 1}.jpg`, imgData, { base64: true });
+        myBtn[i].click();
       } catch (e) {
         console.error(`Gagal memproses gambar ke-${i + 1}:`, e);
       }
     }
-
-    zip.generateAsync({ type: 'blob' }).then(function (content) {
-      saveAs(content, "patroli-foto-" + waktuSekarang + ".zip");
-      spinText.text("100%");
-      overlay.remove();
-      $(".per-image-download-btn").show();
-    });
+      myBtn.show();
+   
   });
 
   function updateMarkiBoxContent($box, options = {}) {
