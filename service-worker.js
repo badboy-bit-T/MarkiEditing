@@ -4,6 +4,8 @@ const urlsToCache = [
   "/index.html",
   "/css/style1.css",
   "/js/script.js",
+  "/js/html2canvas.min.js"
+  "/js/jquery-3.7.1.min.js"
   "/img/water_icon_anchor.png",
   "/img/water_icon_coordinate.png",
   "/img/water_icon_handler.png",
