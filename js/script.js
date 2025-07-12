@@ -1,8 +1,10 @@
 const popupFormEditMark = $('#popup');
 let currentWatermark = null;
 
+// Fungsi padding angka jadi 2 digit
 const pad = n => n.toString().padStart(2, '0');
 
+// Waktu sekarang
 const now = new Date();
 const hh = pad(now.getHours());
 const mm = pad(now.getMinutes());
@@ -14,6 +16,15 @@ const dateStr = `${yyyy}-${mmNum}-${dd}`;
 const timeStr = `${hh}:${mm}`;
 const waktuSekarang = `${hh}-${mm}-${dateStr}`;
 
+// Fungsi animasi teks ketik
+function typeText(text, textElement, index) {
+  if (index < text.length) {
+    textElement.textContent += text.charAt(index);
+    setTimeout(() => typeText(text, textElement, index + 1), 80);
+  }
+}
+
+// Overlay loading spinner
 const overlay = $(`
   <div class="spinner-overlay">
     <div style="display: flex; flex-direction: column; align-items: center;">
@@ -23,17 +34,18 @@ const overlay = $(`
   </div>
 `);
 
+// Fungsi handle download satu gambar
 async function handleDownloadImage(wrapperElement, index, button, waktuSekarang) {
   let spinText;
   try {
     $("body").append(overlay);
     spinText = overlay.find('.spinner-text');
     spinText.text("Memproses...");
-    
-    button.prop('disabled', true).text('Memproses...');
-    button.hide();
+
+    button.css('display', 'none');
+
     wrapperElement.style.display = 'none';
-    wrapperElement.offsetHeight;
+    wrapperElement.offsetHeight; // trigger reflow
     wrapperElement.style.display = '';
     await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -43,10 +55,7 @@ async function handleDownloadImage(wrapperElement, index, button, waktuSekarang)
     });
 
     const blob = await new Promise((resolve, reject) => {
-      canvas.toBlob(blob => {
-        if (blob) resolve(blob);
-        else reject(new Error('Gagal membuat blob'));
-      }, 'image/jpeg');
+      canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Gagal membuat blob')), 'image/jpeg');
     });
 
     await new Promise(resolve => setTimeout(resolve, 300));
@@ -56,12 +65,22 @@ async function handleDownloadImage(wrapperElement, index, button, waktuSekarang)
     alert('Terjadi kesalahan: ' + err.message);
   } finally {
     button.show();
-    button.prop('disabled', false).text('Download');
+    button.css('display', 'inline-block');
     overlay.remove();
   }
 }
 
+// Document Ready
 $(document).ready(function () {
+  // Tampilkan animasi teks di tengah
+  const textElement = document.getElementById("animatedText");
+  typeText('Cukup 3 menit ', textElement, 0);
+
+  setTimeout(function () {
+      textElement.innerHTML += '<span>Laporanmu Siap Dibagikan 😎✌</span>';
+  }, 3000);
+
+  // Isi default input tanggal dan jam
   const dayName = getIndonesianDayName(dateStr);
   $('#input-date').val(dateStr);
   $('#input-time').val(timeStr);
@@ -81,10 +100,11 @@ $(document).ready(function () {
   $('#upload').on('change', function (e) {
     const files = e.target.files;
     if (!files.length) return;
-
+    $('#animatedText').hide();
     $('#output-container').empty();
     $('#download-image').show();
-    $('.upload-label').css('right', '50px')
+    $('.upload-label').css('right', '50px');
+
     Array.from(files).forEach((file, index) => {
       if (!file.type.startsWith('image/')) return;
 
@@ -100,19 +120,9 @@ $(document).ready(function () {
 
         const downloadBtn = $(`
           <button class="per-image-download-btn" title="Download gambar ini"
-            style="
-              position: absolute;
-              top: 10px;
-              right: 10px;
-              z-index: 10;
-              background: darkgrey;
-              color: black;
-              border: none;
-              border-radius: 5px;
-              padding: 4px 8px;
-              cursor: pointer;
-              font-size: 12px;
-            ">
+            style="position: absolute; top: 10px; right: 10px; z-index: 10;
+                   background: darkgrey; color: black; border: none;
+                   border-radius: 5px; padding: 4px 8px; cursor: pointer; font-size: 12px;">
             Download
           </button>
         `);
@@ -156,11 +166,11 @@ $(document).ready(function () {
     if (!currentWatermark) return alert('Tidak ada watermark yang dipilih.');
     const data = getFormData();
     updateMarkiBoxContent(currentWatermark, data);
-    
-    // 🔁 Samakan nama petugas di semua watermark
+
+    // Samakan nama petugas di semua watermark
     $('.marki-box-clone .note-view').text(data.handler);
-    $('.marki-box .note-view').text(data.handler); // jika watermark default juga ingin diubah
-    
+    $('.marki-box .note-view').text(data.handler);
+
     popupFormEditMark.hide();
     currentWatermark = null;
   });
@@ -181,10 +191,11 @@ $(document).ready(function () {
         console.error(`Gagal memproses gambar ke-${i + 1}:`, e);
       }
     }
-      myBtn.show();
-   
+
+
   });
 
+  // Helper Functions
   function updateMarkiBoxContent($box, options = {}) {
     if (options.time) {
       const [jam, menit] = options.time.split(':');
