@@ -341,3 +341,34 @@ h1,h2,h3,h4{
   100% { transform: rotate(360deg); }
 }
  
+     #animatedText {
+        padding-top: 50px;
+      min-height: 100vh;
+      font-size: 2.5rem;
+      text-align: center;
+      max-width: 100%;
+      color: grey;
+      font-weight: 900;
+      animation: blink-caret 0.75s step-end infinite;
+    }
+    #animatedText span {
+        margin-top: 10px;
+        display: block;
+        width: 100%;
+        font-size: 1.4rem;
+        opacity: 80%;
+    }
+
+    @keyframes blink-caret {
+      50% { border-color: transparent; }
+    }
+.navbar-bottom{
+    position: fixed;
+    left: 0;
+    right: 0; bottom: 0;
+    z-index: 49;
+    height: 60px; 
+    background-color: #fff;
+      box-shadow: 10px 0px 20px rgba(0,0,0,0.1);
+
+}
