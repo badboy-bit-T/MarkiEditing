@@ -1,10 +1,8 @@
 const popupFormEditMark = $('#popup');
 let currentWatermark = null;
 
-// Fungsi padding angka jadi 2 digit
 const pad = n => n.toString().padStart(2, '0');
 
-// Waktu sekarang
 const now = new Date();
 const hh = pad(now.getHours());
 const mm = pad(now.getMinutes());
@@ -16,7 +14,6 @@ const dateStr = `${yyyy}-${mmNum}-${dd}`;
 const timeStr = `${hh}:${mm}`;
 const waktuSekarang = `${hh}-${mm}-${dateStr}`;
 
-// Fungsi animasi teks ketik
 function typeText(text, textElement, index) {
   if (index < text.length) {
     textElement.textContent += text.charAt(index);
@@ -24,7 +21,6 @@ function typeText(text, textElement, index) {
   }
 }
 
-// Overlay loading spinner
 const overlay = $(`
   <div class="spinner-overlay">
     <div style="display: flex; flex-direction: column; align-items: center;">
@@ -34,7 +30,6 @@ const overlay = $(`
   </div>
 `);
 
-// Fungsi handle download satu gambar
 async function handleDownloadImage(wrapperElement, index, button, waktuSekarang) {
   let spinText;
   try {
@@ -45,7 +40,7 @@ async function handleDownloadImage(wrapperElement, index, button, waktuSekarang)
     button.css('display', 'none');
 
     wrapperElement.style.display = 'none';
-    wrapperElement.offsetHeight; // trigger reflow
+    wrapperElement.offsetHeight;
     wrapperElement.style.display = '';
     await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -54,12 +49,16 @@ async function handleDownloadImage(wrapperElement, index, button, waktuSekarang)
       backgroundColor: null
     });
 
+    const ext = wrapperElement.getAttribute('data-ext') || 'jpg';
+    const mimeType = ext === 'png' ? 'image/png' : 'image/jpeg';
+    const fileExtension = ext === 'png' ? 'png' : 'jpg';
+
     const blob = await new Promise((resolve, reject) => {
-      canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Gagal membuat blob')), 'image/jpeg');
+      canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Gagal membuat blob')), mimeType);
     });
 
     await new Promise(resolve => setTimeout(resolve, 300));
-    saveAs(blob, `patroli_${index + 1}_${waktuSekarang}.jpg`);
+    saveAs(blob, `patroli_${index + 1}_${waktuSekarang}.${fileExtension}`);
   } catch (err) {
     console.error(err);
     alert('Terjadi kesalahan: ' + err.message);
@@ -70,17 +69,14 @@ async function handleDownloadImage(wrapperElement, index, button, waktuSekarang)
   }
 }
 
-// Document Ready
 $(document).ready(function () {
-  // Tampilkan animasi teks di tengah
   const textElement = document.getElementById("animatedText");
   typeText('Cukup 3 menit ', textElement, 0);
 
   setTimeout(function () {
-      textElement.innerHTML += '<span>Laporanmu Siap Dibagikan 😎✌</span>';
+    textElement.innerHTML += '<span>Laporanmu Siap Dibagikan 😎✌</span>';
   }, 3000);
 
-  // Isi default input tanggal dan jam
   const dayName = getIndonesianDayName(dateStr);
   $('#input-date').val(dateStr);
   $('#input-time').val(timeStr);
@@ -115,8 +111,9 @@ $(document).ready(function () {
         img.style.maxWidth = '100%';
         img.style.display = 'block';
 
+        const ext = file.name.split('.').pop().toLowerCase();
         const wrapper = $('<div class="image-wrapper" style="position:relative; margin-bottom:15px;"></div>');
-        wrapper.attr('data-index', index).append(img);
+        wrapper.attr('data-index', index).attr('data-ext', ext).append(img);
 
         const downloadBtn = $(`
           <button class="per-image-download-btn" title="Download gambar ini"
@@ -167,7 +164,6 @@ $(document).ready(function () {
     const data = getFormData();
     updateMarkiBoxContent(currentWatermark, data);
 
-    // Samakan nama petugas di semua watermark
     $('.marki-box-clone .note-view').text(data.handler);
     $('.marki-box .note-view').text(data.handler);
 
@@ -191,11 +187,8 @@ $(document).ready(function () {
         console.error(`Gagal memproses gambar ke-${i + 1}:`, e);
       }
     }
-
-
   });
 
-  // Helper Functions
   function updateMarkiBoxContent($box, options = {}) {
     if (options.time) {
       const [jam, menit] = options.time.split(':');
