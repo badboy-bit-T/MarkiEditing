@@ -1,7 +1,42 @@
    @font-face {
     font-family: 'HagoNumberMarki';
-  src: url('../font/BloggersansBold.ttf') format('truetype');
+  src: url('../font/hagonumber_marki_revised.ttf') format('truetype');
               font-weight: bold;
+              
+}
+    #template {
+        display: block;
+        position: fixed;
+        top: 30px;
+        left: 20px;
+    }
+/* Styling umum untuk c2sc */
+body {
+  font-feature-settings: 'sups' off, 'liga' off, 'c2sc' off;
+  font-variant-position: normal; /* reset posisi superscript/subscript */
+  vertical-align: baseline; /* pastikan sejajar */
+  font-size: 1em; /* kembalikan ukuran normal */
+}
+.c2sc {
+  display: inline-block;
+  /* Penyesuaian posisi dan skala */
+  -webkit-transform: translateY(0.43em) scaleY(2) scaleX(2.2);
+  -moz-transform: translateY(0.43em) scaleY(2) scaleX(2.2);
+  -ms-transform: translateY(0.43em) scaleY(2) scaleX(2.2);
+  -o-transform: translateY(0.43em) scaleY(2) scaleX(2.2);
+  transform: translateY(0.43em) scaleY(2) scaleX(2.2);
+
+  /* Pastikan transform origin tetap di tengah huruf */
+  -webkit-transform-origin: center;
+  -moz-transform-origin: center;
+  -ms-transform-origin: center;
+  -o-transform-origin: center;
+  transform-origin: center;
+
+  margin: 0 2px;
+}}.titik2 {
+    margin-bottom: 2px;
+    margin-top: 8px;
 }
 #output-container {
     margin-bottom: 50px;
@@ -10,12 +45,11 @@
       background: transparent;
     }
     .marki-box,.marki-box-clone{
-        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4); /* arah, ketebalan, warna */
+
     }
     .note-view,.location-view {
         font-size: 14px;
         display: flex;
-        align-items: center;
     }
     #loading {
         position: fixed;
@@ -58,22 +92,21 @@ h1,h2,h3,h4{
 }
 .marki-box , .time-box, .marki-box-clone{
       background: url('../img/water_security_patro1_bg.png');
+      
       background-size: cover;
       background-position: center;
       padding: 5px;
-      max-width: 225px;
+      max-width: 228px;
       color: white;
       border-radius: 5px;
-      font-style: normal;
+      font-style: bold;
       font-weight: 900;
       display: inline-block; /* wajib agar transform bekerja dengan benar */
-      transform: scaleX(0.93); /* perkecil lebar font */
-      transform-origin: left;
     }
       .titik2 b {
-        width: 6px;
-        height: 6px;
-        background-color: #fff;
+        width: 7px;
+        height: 7px;
+        background-color: #E1E7FD;
         margin: 2px 2px;
         opacity: 90%;
         border-radius: 50%;
@@ -118,18 +151,20 @@ h1,h2,h3,h4{
       font-size: 32px;
       color: #E1E7FD;
       text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
-      padding-top: 7px;
+      padding-top: 1px;
       padding-left: 1px;
       font-weight: 900;
-       margin-bottom: 2px;
-
+       margin-bottom: 0;
+       font-style: bold;
+        font-weight: 900;
     }
     .small-text {
       font-size: 16px;
-      font-weight: 900;
+      font-weight: 900;      color: #E1E7FD;
     }
     .location-section, .coordinate-section, .handler-section, .note-section {
-      margin-top: 3px;
+      margin-top: 2.50px;
+      
     }
     .icon {
       width: 20px;
@@ -140,7 +175,7 @@ h1,h2,h3,h4{
       font-size: 14px;
       flex-grow: 1;
       flex-shrink: 1;
-      font-weight: 900;
+      font-weight: 900;      color: #E1E7FD;
     }
     .validated-section {
       max-width: 150px:
@@ -165,9 +200,6 @@ h1,h2,h3,h4{
       opacity: 90%;
       font-weight: 900;
 
-    }
-    #template {
-        display: none;
     }
         #form-inout {
       font-family: Arial, sans-serif;
@@ -332,8 +364,8 @@ h1,h2,h3,h4{
 }
 .validated-text {
       display: inline-block; /* wajib agar transform bekerja dengan benar */
-      transform: scaleX(0.97); /* perkecil lebar font */
-      transform-origin: left;
+       /* transform: scaleX(0.97); perkecil lebar font */
+
       opacity: 80%;
 }
 @keyframes spin {
@@ -370,5 +402,4 @@ h1,h2,h3,h4{
     height: 60px; 
     background-color: #fff;
       box-shadow: 10px 0px 20px rgba(0,0,0,0.1);
-
 }
