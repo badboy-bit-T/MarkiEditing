@@ -5,7 +5,7 @@
               
 }
     #template {
-        display: block;
+        display: none;
         position: fixed;
         top: 30px;
         left: 20px;
