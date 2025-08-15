@@ -1,5 +1,7 @@
 const popupFormEditMark = $('#popup');
 let currentWatermark = null;
+let allWrappers = [];
+let currentIndex = 0;
 
 const pad = n => n.toString().padStart(2, '0');
 
@@ -23,7 +25,11 @@ const overlay = $(`
   </div>  
 `);  
 
-async function handleDownloadImage(wrapperElement, index, button, waktuSekarang) {
+async function handleDownloadImage(wrapperElement, index, button) {
+    // Buat waktu selalu update
+    const now = new Date();
+    const waktuSekarang = `${pad(now.getHours())}-${pad(now.getMinutes())}-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+
     let spinText;
     try {
         $("body").append(overlay);
@@ -63,8 +69,21 @@ async function handleDownloadImage(wrapperElement, index, button, waktuSekarang)
     }
 }
 
-function c2sc(gerak) {
-    return gerak.replace(/[MAP]/g, match => `<span class="c2sc">${match}</span>`);
+function c2sc(isi) {
+  const styleMap = {
+    M: 'c2sc',
+    A: 'c2sc marginC2sc',
+    P: 'c2sc marginC2sc',
+    ' ': 'spasi'
+  };
+
+  return isi.replace(/[MAP ]/g, char => {
+    const className = styleMap[char];
+    if (className === 'spasi') {
+      return `&nbsp;`;
+    }
+    return `<span class="${className}">${char}</span>`;
+  });
 }
 
 $(document).ready(function () {
@@ -93,6 +112,9 @@ $(document).ready(function () {
         $('#download-image').show();
         $('.upload-label').css('right', '50px');
 
+        allWrappers = [];
+        currentIndex = 0;
+
         Array.from(files).forEach((file, index) => {  
             if (!file.type.startsWith('image/')) return;  
 
@@ -104,8 +126,10 @@ $(document).ready(function () {
                 img.style.display = 'block';  
 
                 const ext = file.name.split('.').pop().toLowerCase();  
-                const wrapper = $('<div class="image-wrapper" style="position:relative; margin-bottom:15px;"></div>');  
-                wrapper.attr('data-index', index).attr('data-ext', ext).append(img);  
+                const wrapper = $('<div class="image-wrapper"></div>')  
+                    .attr('data-index', index)
+                    .attr('data-ext', ext)
+                    .append(img);  
 
                 const downloadBtn = $(`  
                   <button class="per-image-download-btn" title="Download gambar ini"  
@@ -117,7 +141,7 @@ $(document).ready(function () {
                 `);  
 
                 downloadBtn.on('click', function () {  
-                    handleDownloadImage(wrapper[0], index, $(this), waktuSekarang);  
+                    handleDownloadImage(wrapper[0], index, $(this));  
                 });  
                 wrapper.append(downloadBtn);  
 
@@ -145,56 +169,16 @@ $(document).ready(function () {
 
                 wrapper.append(watermark);  
                 $('#output-container').append(wrapper);  
-
-                const slider = document.getElementById('output-container');  
-                let isDown = false;  
-                let startX;  
-                let scrollLeft;  
-                  
-                // Drag pakai mouse  
-                slider.addEventListener('mousedown', (e) => {  
-                    isDown = true;  
-                    startX = e.pageX - slider.offsetLeft;  
-                    scrollLeft = slider.scrollLeft;  
-                    slider.style.cursor = 'grabbing';  
-                });  
-                  
-                slider.addEventListener('mouseleave', () => {  
-                    isDown = false;  
-                    slider.style.cursor = 'grab';  
-                });  
-                  
-                slider.addEventListener('mouseup', () => {  
-                    isDown = false;  
-                    slider.style.cursor = 'grab';  
-                });  
-                  
-                slider.addEventListener('mousemove', (e) => {  
-                    if (!isDown) return;  
-                    e.preventDefault();  
-                    const x = e.pageX - slider.offsetLeft;  
-                    const walk = (x - startX) * 1; // kecepatan scroll  
-                    slider.scrollLeft = scrollLeft - walk;  
-                });  
-                  
-                // Swipe pakai touch  
-                let touchStartX = 0;  
-                let touchScrollLeft = 0;  
-                  
-                slider.addEventListener('touchstart', (e) => {  
-                    touchStartX = e.touches[0].pageX;  
-                    touchScrollLeft = slider.scrollLeft;  
-                }, { passive: true });  
-                  
-                slider.addEventListener('touchmove', (e) => {  
-                    const touchX = e.touches[0].pageX;  
-                    const walk = (touchX - touchStartX) * 1;  
-                    slider.scrollLeft = touchScrollLeft - walk;  
-                }, { passive: true });  
+                allWrappers.push(wrapper);
             };  
 
             reader.readAsDataURL(file);  
         });
+
+        setTimeout(() => {
+            showImageAt(0);
+            addNavigationButtons();
+        }, 300);
     });
 
     $('#apply-marki').on('click', function () {
@@ -274,7 +258,7 @@ $(document).ready(function () {
             date: $('#input-date').val() || '2000-01-01',
             day: $('#input-day').val() || 'Hari',
             location: c2sc($('#input-location').val()) || 'Jalan Tanpa Nama',
-            handler: c2sc($('#input-handler').val()) || c2sc('Petugas Patroli')
+            handler: c2sc($('#input-handler').val())|| c2sc('Petugas Patroli')
         };
     }
 
@@ -282,5 +266,53 @@ $(document).ready(function () {
         const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
         const date = new Date(dateStr);
         return isNaN(date) ? 'Hari' : days[date.getDay()];
+    }
+
+    // Navigasi antar gambar
+    function showImageAt(index, direction) {
+        if (index < 0 || index >= allWrappers.length) return;
+        const current = allWrappers[currentIndex];
+        const next = allWrappers[index];
+
+        if (current && current[0] !== next[0]) {
+            current.removeClass('active show slide-in-left slide-in-right');
+        }
+
+        next.removeClass('slide-in-left slide-in-right show').addClass('active');
+
+        if (direction === 'left') {
+            next.addClass('slide-in-left');
+            requestAnimationFrame(() => {
+                next.removeClass('slide-in-left').addClass('show');
+            });
+        } else if (direction === 'right') {
+            next.addClass('slide-in-right');
+            requestAnimationFrame(() => {
+                next.removeClass('slide-in-right').addClass('show');
+            });
+        } else {
+            next.addClass('show');
+        }
+
+        currentIndex = index;
+    }
+
+    function addNavigationButtons() {
+        if ($('#prev-btn').length === 0) {
+            const prevBtn = $('<button id="prev-btn" class="nav-btn left">&#9664;</button>');
+            const nextBtn = $('<button id="next-btn" class="nav-btn right">&#9654;</button>');
+
+            prevBtn.on('click', () => {
+                const newIndex = (currentIndex - 1 + allWrappers.length) % allWrappers.length;
+                showImageAt(newIndex, 'left');
+            });
+
+            nextBtn.on('click', () => {
+                const newIndex = (currentIndex + 1) % allWrappers.length;
+                showImageAt(newIndex, 'right');
+            });
+
+            $('#output-container').append(prevBtn, nextBtn);
+        }
     }
 });
