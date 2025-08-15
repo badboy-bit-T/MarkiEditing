@@ -16,9 +16,7 @@ body {
   min-height: 100vh;
   margin: 0;
 }
-.datetime, .small-text, .note-view, .coordinate-view, .note-view{
-    opacity: 98%;
-}
+
 .c2sc {
   display: inline-block;
 
@@ -32,7 +30,7 @@ body {
 
     .small-text {
       font-size: 16px;
-      font-weight: 900;      color: #fff;
+      font-weight: 900;
       text-shadow: 0.25px 0 #fff,
     -0.18px 0 #fff,
     0 0.18px #fff,
@@ -46,7 +44,7 @@ body {
       font-size: 12px;
       flex-grow: 1;
       flex-shrink: 1;
-      font-weight: 900;      color: #fff;
+      font-weight: 900;      color: #E1E7FD;
             text-shadow: 0.25px 0 #fff,
     -0.18px 0 #fff,
     0 0.18px #fff,
@@ -84,10 +82,12 @@ body {
     }
     .marki-box,.marki-box-clone{
      background-color: transparent;
+     color: #E1E7FD;
     }
     .note-view,.location-view {
         font-size: 14px;
         display: flex;
+        color: #E1E7FD;
     }
     #loading {
         position: fixed;
@@ -141,7 +141,6 @@ h1,h2,h3,h4{
         height: 7px;
         background-color: #fff;
         margin: 2px 2px;
-        opacity: 90%;
         border-radius: 50%;
     }
     .row {
@@ -186,7 +185,7 @@ h1,h2,h3,h4{
 
 .datetime {
   font-weight: 900;
-  font-size: 32px; /* atur sesuai kebutuhan */
+  font-size: 34px; /* atur sesuai kebutuhan */
     text-shadow:
     0.5px 0 #fff,
     -0.5px 0 #fff,
@@ -195,7 +194,6 @@ h1,h2,h3,h4{
     margin-left: 2px;
 
   /* Rapiin jarak huruf */
-  letter-spacing: -0.5px;
 
   /* Optimalisasi rendering font */
 
