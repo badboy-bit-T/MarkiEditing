@@ -1,8 +1,7 @@
    @font-face {
-    font-family: 'HagoNumberMarki';
-  src: url('../font/hagonumber_marki_revised.ttf') format('truetype');
+    font-family: 'MarkiFont';
+  src: url('../font/marki_font.ttf') format('truetype');
               font-weight: bold;
-              
 }
     #template {
         display: none;
@@ -12,31 +11,70 @@
     }
 /* Styling umum untuk c2sc */
 body {
-  font-feature-settings: 'sups' off, 'liga' off, 'c2sc' off;
-  font-variant-position: normal; /* reset posisi superscript/subscript */
-  vertical-align: baseline; /* pastikan sejajar */
-  font-size: 1em; /* kembalikan ukuran normal */
+     background: #fff;
+     font-family: 'MarkiFont', Sans-Serif;
+  min-height: 100vh;
+  margin: 0;
+}
+.datetime, .small-text, .note-view, .coordinate-view, .note-view{
+    opacity: 98%;
 }
 .c2sc {
   display: inline-block;
-  /* Penyesuaian posisi dan skala */
-  -webkit-transform: translateY(0.43em) scaleY(2) scaleX(2.2);
-  -moz-transform: translateY(0.43em) scaleY(2) scaleX(2.2);
-  -ms-transform: translateY(0.43em) scaleY(2) scaleX(2.2);
-  -o-transform: translateY(0.43em) scaleY(2) scaleX(2.2);
-  transform: translateY(0.43em) scaleY(2) scaleX(2.2);
 
-  /* Pastikan transform origin tetap di tengah huruf */
-  -webkit-transform-origin: center;
-  -moz-transform-origin: center;
-  -ms-transform-origin: center;
-  -o-transform-origin: center;
-  transform-origin: center;
+  transform: scaleX(2.25) translateX(0.09em)
+}
+    .location-view .cs2c, .coordinate-view .cs2c, .note-view .cs2c{            text-shadow: 0.25px 0 #fff,
+    -0.1px 0 #fff,
+    0 0.1px #fff,
+    0 -0.1px #fff;
+    }
 
-  margin: 0 2px;
-}}.titik2 {
-    margin-bottom: 2px;
-    margin-top: 8px;
+    .small-text {
+      font-size: 16px;
+      font-weight: 900;      color: #fff;
+      text-shadow: 0.25px 0 #fff,
+    -0.18px 0 #fff,
+    0 0.18px #fff,
+    0 -0.18px #fff;
+    letter-spacing: 0.5px;
+    }
+    .location-view,.note-view {
+        padding-left: 3px;
+    }
+    .location-view, .coordinate-view, .note-view {
+      font-size: 12px;
+      flex-grow: 1;
+      flex-shrink: 1;
+      font-weight: 900;      color: #fff;
+            text-shadow: 0.25px 0 #fff,
+    -0.18px 0 #fff,
+    0 0.18px #fff,
+    0 -0.18px #fff;
+    letter-spacing: 0.5px;
+    }
+    .marginC2sc {
+        margin-right: 1px;
+    }
+.c2sc {
+/* Matikan superscript bawaan */
+    font-family: 'MarkiFont', sans-serif;
+    font-feature-settings: 'sups' off, 'subs' off;
+}
+
+/* Aktifkan small caps dari huruf kapital */
+.my-smallcaps {
+    font-family: 'MarkiFont', sans-serif;
+    font-feature-settings: 'c2sc' on;
+}
+
+/* Nonaktifkan ligature dan pakai kerning */
+.my-plain {
+    font-family: 'MarkiFont', sans-serif;
+    font-feature-settings: 'liga' off, 'kern' on;
+}
+.titik2 {
+    margin: 12px 2px 2px 2px;
 }
 #output-container {
     margin-bottom: 50px;
@@ -45,7 +83,7 @@ body {
       background: transparent;
     }
     .marki-box,.marki-box-clone{
-
+     background-color: transparent;
     }
     .note-view,.location-view {
         font-size: 14px;
@@ -73,12 +111,6 @@ body {
       background-color: #fff;
       border-radius: 5px;
   }
-body {
-   background: #fff;
-     font-family: 'HagoNumberMarki', Sans-Serif;
-  min-height: 100vh;
-  margin: 0;
-}
 
 #template img, #template video{
  max-width: 100%;
@@ -102,11 +134,12 @@ h1,h2,h3,h4{
       font-style: bold;
       font-weight: 900;
       display: inline-block; /* wajib agar transform bekerja dengan benar */
+      background-color: transparent;
     }
       .titik2 b {
         width: 7px;
         height: 7px;
-        background-color: #E1E7FD;
+        background-color: #fff;
         margin: 2px 2px;
         opacity: 90%;
         border-radius: 50%;
@@ -141,44 +174,61 @@ h1,h2,h3,h4{
       height: 20px;
     }
     .title {
-      padding: 7px 7px;
+      padding: 5px 5px;
       font-size: 20px;
-      text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
-      font-style: capitalize;
+    text-shadow:
+    0.25px 0 #fff,
+    -0.25px 0 #fff,
+    0 0.25px #fff,
+    0 -0.25px #fff; /* efek tebal tanpa blur */      font-style: capitalize;
       font-weight: 900;
     }
-    .datetime {
-      font-size: 32px;
-      color: #E1E7FD;
-      text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
-      padding-top: 1px;
-      padding-left: 1px;
-      font-weight: 900;
-       margin-bottom: 0;
-       font-style: bold;
-        font-weight: 900;
-    }
-    .small-text {
-      font-size: 16px;
-      font-weight: 900;      color: #E1E7FD;
-    }
+
+.datetime {
+  font-weight: 900;
+  font-size: 32px; /* atur sesuai kebutuhan */
+    text-shadow:
+    0.5px 0 #fff,
+    -0.5px 0 #fff,
+    0 0.5px #fff,
+    0 -0.5px #fff; /* efek tebal tanpa blur */
+    margin-left: 2px;
+
+  /* Rapiin jarak huruf */
+  letter-spacing: -0.5px;
+
+  /* Optimalisasi rendering font */
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision; 
+
+  /* Trik scaling horizontal */
+  display: inline-block;
+  transform: scaleX(1.05);
+  color: #ffffff; /* warna teks */
+  
+  /* Penebalan tambahan */
+  -webkit-text-stroke: 0.3px #fff; /* outline tipis */
+
+}
+.jam,.menit{
+    display: inline-block;
+    transform: scaleY(1.2);
+}
     .location-section, .coordinate-section, .handler-section, .note-section {
-      margin-top: 2.50px;
-      
+      margin-top: 2.6px;
+    }
+    .handler-section, .note-section {
+      margin-bottom: 2.6px;
     }
     .icon {
-      width: 20px;
-      height: 20px;
-      margin-right: 4px;
-    }
-    .location-view, .coordinate-view, .note-view {
-      font-size: 14px;
-      flex-grow: 1;
-      flex-shrink: 1;
-      font-weight: 900;      color: #E1E7FD;
+      width: 18px;
+      height: 18px;
+      margin-right: 3px;
     }
     .validated-section {
-      max-width: 150px:
+      max-width: 140px:
       white-space: nowrap;
       flex-wrap: nowrap;
       overflow: hidden;
@@ -190,12 +240,12 @@ h1,h2,h3,h4{
     .validated-icon {
       width: 15px;
       height: 15px;
-      margin-left: 2px;
-      margin-bottom: 2px;
+
     }
     .validated-text {
       font-size: 12px;
-      margin-left: 2px;
+      margin-left: 4px;
+      margin-right: 4px;
       color: #fff;
       opacity: 90%;
       font-weight: 900;
@@ -266,7 +316,7 @@ h1,h2,h3,h4{
     }
 
     button {
-          padding: 8px 12px;
+        padding: 8px 12px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
@@ -402,4 +452,49 @@ h1,h2,h3,h4{
     height: 60px; 
     background-color: #fff;
       box-shadow: 10px 0px 20px rgba(0,0,0,0.1);
+}
+.image-wrapper {
+  position: relative;
+  display: none;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.image-wrapper.active {
+  display: block;
+}
+
+.image-wrapper.slide-in-left {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.image-wrapper.slide-in-right {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.image-wrapper.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  color: white;
+  border: none;
+  font-size: 24px;
+  padding: 8px 12px;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.nav-btn.left {
+  left: 10px;
+}
+
+.nav-btn.right {
+  right: 10px;
 }
