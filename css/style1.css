@@ -479,7 +479,7 @@ h1,h2,h3,h4{
     position: fixed;
     left: 0;
     right: 0; bottom: 0;
-    z-index: 49;
+    z-index: 1;
     height: 60px; 
     background-color: #fff;
       box-shadow: 10px 0px 20px rgba(0,0,0,0.1);
@@ -529,3 +529,74 @@ h1,h2,h3,h4{
 .nav-btn.right {
   right: 10px;
 }
+
+    /* Tombol */
+    .btn-popup-instruksi {
+      padding: 5px 10px;
+      background: whitesmoke;
+      color: grey;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn-popup-instruksi:hover {
+      background: #fff;
+    }
+
+    /* Overlay */
+    .overlay-instruksi {
+      display: none; 
+      position: fixed; 
+      top: 0; left: 0; bottom: 0; right: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 999;
+    }
+
+.popup-content-instruksi {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+    /* Popup box */
+    .popup-box-instruksi {
+      position: relative;
+      background: #fff;
+      width: 80%;
+      max-width: 500px;
+      margin: 40px auto;
+      border-radius: 12px;
+      padding: 20px;
+      max-height: 80vh;  /* biar tidak memenuhi layar */
+      overflow-y: auto;  /* scroll kalau konten panjang */
+      box-shadow: 0px 8px 20px rgba(0,0,0,0.3);
+      z-index: 10000;
+    }
+
+    /* Tombol close */
+    .close-btn-instruksi {
+      position: fixed;
+      top: 20px;
+      right: 15px;
+      font-size: 30px;
+      cursor: pointer;
+      color: #fff;
+      background: rgba(0,0,0,0.6);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      text-align: center;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .popup-content-instruksi img {
+      max-width: 100%;
+      border-radius: 6px;
+      margin: 10px 0;
+    }
+
+    .popup-content-instruksi p {
+      line-height: 1.6;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
