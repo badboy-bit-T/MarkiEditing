@@ -274,7 +274,7 @@ $('#apply-marki').on('click', function () {
         }  
 
         if (options.day) {  
-            $box.find('.column.small-text div').eq(1).text(c2sc(options.day));  
+            $box.find('.column.small-text div').eq(1).html(c2sc(options.day));  
         }  
 
         if (options.location !== undefined) {  
@@ -304,7 +304,7 @@ $('#apply-marki').on('click', function () {
         return {
             time: $('#input-time').val() || '00:00',
             date: $('#input-date').val() || '2000-01-01',
-            day: c2sc($('#input-day').val()) || 'Hari',
+            day: $('#input-day').val() || 'Hari',
             location: c2sc($('#input-location').val()) || 'Jalan Tanpa Nama',
             handler: c2sc($('#input-handler').val())|| c2sc('Petugas Patroli')
         };
@@ -313,8 +313,7 @@ $('#apply-marki').on('click', function () {
     function getIndonesianDayName(dateStr) {
         const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
         const date = new Date(dateStr);
-        const hariNi = isNaN(date) ? 'Hari' : days[date.getDay()];
-      return hariNi;
+        return isNaN(date) ? 'Hari' : days[date.getDay()];
     }
 
     // Navigasi antar gambar
