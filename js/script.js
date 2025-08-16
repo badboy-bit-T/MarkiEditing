@@ -349,14 +349,14 @@ $(document).ready(function () {
 
       $("#closePopupInstruksi").click(function(){
         $("#popupOverlayInstruksi").fadeOut(300);
-                  $('.navbar-bottom, .upload-label, #download-image').show();
+                  $('.navbar-bottom, .upload-label').show();
       });
 
       // Tutup popup jika klik di luar popup-box
       $(window).click(function(e){
         if($(e.target).is("#popupOverlayInstruksi")){
           $("#popupOverlayInstruksi").fadeOut(300);
-          $('.navbar-bottom, .upload-label, #download-image').show();
+          $('.navbar-bottom, .upload-label').show();
         } 
       });
 });
