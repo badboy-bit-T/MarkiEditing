@@ -26,7 +26,6 @@ const overlay = $(`
 `);  
 
 async function handleDownloadImage(wrapperElement, index, button) {
-    // Buat waktu selalu update
     const now = new Date();
     const waktuSekarang = `${pad(now.getHours())}-${pad(now.getMinutes())}-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 
@@ -36,27 +35,54 @@ async function handleDownloadImage(wrapperElement, index, button) {
         spinText = overlay.find('.spinner-text');
         spinText.text("Memproses...");
 
-        button.css('display', 'none');  
+        button.css('display', 'none');
 
-        wrapperElement.style.display = 'none';  
-        wrapperElement.offsetHeight;  
-        wrapperElement.style.display = '';  
-        await new Promise(resolve => setTimeout(resolve, 100));  
+        // 🔹 1. Pastikan semua font sudah siap
+        if (document.fonts && document.fonts.ready) {
+            await document.fonts.ready;
+        }
 
-        const canvas = await html2canvas(wrapperElement, {  
-            useCORS: true,  
-            backgroundColor: null  
-        });  
+        // 🔹 2. Pastikan semua gambar di dalam wrapperElement sudah ter-load
+        const images = wrapperElement.querySelectorAll('img');
+        await Promise.all(Array.from(images).map(img => {
+            if (img.complete) return Promise.resolve();
+            return new Promise(res => {
+                img.onload = res;
+                img.onerror = res;
+            });
+        }));
 
-        const ext = wrapperElement.getAttribute('data-ext') || 'jpg';  
-        const mimeType = ext === 'png' ? 'image/png' : 'image/jpeg';  
-        const fileExtension = ext === 'png' ? 'png' : 'jpg';  
+        // 🔹 3. Paksa reflow CSS sebelum render
+        wrapperElement.style.display = 'none';
+        wrapperElement.offsetHeight; // reflow
+        wrapperElement.style.display = '';
+        await new Promise(resolve => setTimeout(resolve, 100));
 
-        const blob = await new Promise((resolve, reject) => {  
-            canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Gagal membuat blob')), mimeType);  
-        });  
+        // 🔹 4. Render dengan html2canvas + anti-aliasing
+        const canvas = await html2canvas(wrapperElement, {
+            useCORS: true,
+            backgroundColor: null,
+            scale: window.devicePixelRatio, // resolusi tajam
+            logging: false,
+            imageTimeout: 0,
+            letterRendering: true
+        });
 
-        await new Promise(resolve => setTimeout(resolve, 300));  
+        // 🔹 5. Terapkan anti-aliasing extra di hasil canvas
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+
+        // 🔹 6. Ekspor file
+        const ext = wrapperElement.getAttribute('data-ext') || 'jpg';
+        const mimeType = ext === 'png' ? 'image/png' : 'image/jpeg';
+        const fileExtension = ext === 'png' ? 'png' : 'jpg';
+
+        const blob = await new Promise((resolve, reject) => {
+            canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Gagal membuat blob')), mimeType, 1.0);
+        });
+
+        await new Promise(resolve => setTimeout(resolve, 300));
         saveAs(blob, `patroli_${index + 1}_${waktuSekarang}.${fileExtension}`);
 
     } catch (err) {
@@ -68,12 +94,11 @@ async function handleDownloadImage(wrapperElement, index, button) {
         overlay.remove();
     }
 }
-
 function c2sc(isi) {
   const styleMap = {
-    M: 'c2sc',
+    M: 'c2scM',
     A: 'c2sc marginC2sc',
-    P: 'c2sc marginC2sc',
+    P: 'c2sc c2scP marginC2sc',
     ' ': 'spasi'
   };
 
