@@ -79,7 +79,7 @@ async function handleDownloadImage(wrapperElement, index, button) {
         const fileExtension = ext === 'png' ? 'png' : 'jpg';
 
         const blob = await new Promise((resolve, reject) => {
-            canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Gagal membuat blob')), mimeType, 1.0);
+            canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Gagal membuat blob. sebaiknya download satu-persatu!')), mimeType, 1.0);
         });
 
         await new Promise(resolve => setTimeout(resolve, 300));
