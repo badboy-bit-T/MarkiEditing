@@ -9,6 +9,54 @@
         top: 30px;
         left: 20px;
     }
+    #output-container {
+    display: flex !important;
+    width: 100%;
+    overflow: hidden;
+}
+.fix-center {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.datetime , .small-text{
+    color: #E1E7FD;
+}
+.datetime {
+  font-weight: 900;
+  font-size: 32px; /* atur sesuai kebutuhan */
+    text-shadow:
+    0.5px 0 #E1E7FD,
+    -0.5px 0 #E1E7FD,
+    0 0.5px #E1E7FD,
+    0 -0.5px #E1E7FD; /* efek tebal tanpa blur */
+    margin-left: 2px;
+
+  /* Rapiin jarak huruf */
+
+  /* Optimalisasi rendering font */
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision; 
+
+  /* Trik scaling horizontal */
+
+  color: #E1E7FD; /* warna teks */
+   
+  /* Penebalan tambahan */
+  -webkit-text-stroke: 0.3px #E1E7FD; /* outline tipis */
+
+}
+.small-text {
+    opacity: 0.95;
+}
+    .location-view, .coordinate-view, .note-view {
+        color: #E1E7FD;
+    }
 /* Styling umum untuk c2sc */
 body {
      background: #fff;
@@ -22,26 +70,36 @@ body {
 
   transform: scaleX(2.25) translateX(0.09em)
 }
+    .location-view .c2scP, .coordinate-view .c2scP, .note-view .c2sc{
+  display: inline-block;
+   margin-right: -0.07px;
+  transform: scaleX(1.8) translateX(0.08em)
+}
+.c2scM {
+  display: inline-block;
+    text-shadow: 0;
+  transform: scaleX(1.8) translateX(0.10em)
+}
     .location-view .cs2c, .coordinate-view .cs2c, .note-view .cs2c{            text-shadow: 0.25px 0 #fff,
     -0.1px 0 #fff,
     0 0.1px #fff,
     0 -0.1px #fff;
-    }
 
+    }
     .small-text {
       font-size: 16px;
       font-weight: 900;
-      text-shadow: 0.25px 0 #fff,
-    -0.18px 0 #fff,
-    0 0.18px #fff,
-    0 -0.18px #fff;
+      text-shadow: 0.25px 0 #E1E7FD,
+    -0.18px 0 #E1E7FD,
+    0 0.18px #E1E7FD,
+    0 -0.18px #E1E7FD;
     letter-spacing: 0.5px;
     }
     .location-view,.note-view {
         padding-left: 3px;
     }
     .location-view, .coordinate-view, .note-view {
-      font-size: 12px;
+      font-size: 11px;
       flex-grow: 1;
       flex-shrink: 1;
       font-weight: 900;      color: #E1E7FD;
@@ -49,7 +107,8 @@ body {
     -0.18px 0 #fff,
     0 0.18px #fff,
     0 -0.18px #fff;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05px;
+  
     }
     .marginC2sc {
         margin-right: 1px;
@@ -87,7 +146,8 @@ body {
     .note-view,.location-view {
         font-size: 14px;
         display: flex;
-        color: #E1E7FD;
+        color: #fff;
+        opacity: 0.9;
     }
     #loading {
         position: fixed;
@@ -183,36 +243,9 @@ h1,h2,h3,h4{
       font-weight: 900;
     }
 
-.datetime {
-  font-weight: 900;
-  font-size: 34px; /* atur sesuai kebutuhan */
-    text-shadow:
-    0.5px 0 #fff,
-    -0.5px 0 #fff,
-    0 0.5px #fff,
-    0 -0.5px #fff; /* efek tebal tanpa blur */
-    margin-left: 2px;
-
-  /* Rapiin jarak huruf */
-
-  /* Optimalisasi rendering font */
-
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: geometricPrecision; 
-
-  /* Trik scaling horizontal */
-  display: inline-block;
-  transform: scaleX(1.05);
-  color: #ffffff; /* warna teks */
-  
-  /* Penebalan tambahan */
-  -webkit-text-stroke: 0.3px #fff; /* outline tipis */
-
-}
 .jam,.menit{
     display: inline-block;
-    transform: scaleY(1.2);
+    transform: scaleY(1.13) scaleX(1.13);
 }
     .location-section, .coordinate-section, .handler-section, .note-section {
       margin-top: 2.6px;
