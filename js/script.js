@@ -313,7 +313,8 @@ $('#apply-marki').on('click', function () {
     function getIndonesianDayName(dateStr) {
         const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
         const date = new Date(dateStr);
-        return isNaN(date) ? 'Hari' : days[date.getDay()];
+        const hariNi = isNaN(date) ? 'Hari' : days[date.getDay()];
+      return c2sc(hariNi) ;
     }
 
     // Navigasi antar gambar
