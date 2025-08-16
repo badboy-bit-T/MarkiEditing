@@ -23,14 +23,8 @@
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   <title>Patroli Keamanan</title>
     <link rel="stylesheet" href="css/style1.css" type="text/css" media="all" />
-
-
-  <style>
-
-</style>
 </head>
 <body>
-    
     <!-- Input Upload Gambar -->
 <input type="file" multiple id="upload" accept="image/*" style="display: none;" />
 <div>
@@ -40,7 +34,43 @@
   <div id="animatedText"></div>
 <!-- Kontainer untuk Menampilkan Gambar dan Watermark -->
 <div class="fix-center">
+    <div>
+        
+
+      <button class="btn-popup-instruksi" id="openPopupInstruksi">Ingin edit Video?</button>
+
     <div id="output-container" style="position: relative; display: inline-block;"></div>
+    </div>
+  <div class="overlay-instruksi" id="popupOverlayInstruksi">
+    <div class="popup-box-instruksi">
+      <div class="close-btn-instruksi" id="closePopupInstruksi"><span>&times;</span></div>
+      <div class="popup-content-instruksi">
+        <h2>Instruksi Edit Video</h2>
+        <p>1. Download Gambar Transparant <a href="img/transparent.png" download="transparent.png">Disini!</a>.</p>
+        <p>2. Unggah gambar transparant yang sudah didownload</p>
+        <p>3. Sesuaikan Timestamp anda.</p>
+        <img src="img/transparent-timestamp-example.jpg" alt="Contoh Gambar">
+        <p>4. Download gambar transparant yang sudah diberi Timestamp.</p>
+        <p>5. Buka Aplikasi edit video (Capcut disarankan).</p>
+        <p>6. Buat proyek baru.</p>
+        <img src="img/buat-proyek-baru.jpg" alt="Contoh Gambar">
+
+        <p>7. Pilih video yang ingin diedit.</p>
+        <img src="img/pilih-video.jpg" alt="Contoh Gambar">
+
+        <p>8. Tambahkan gambar transparant dengan Timestamp sebagai Overlay</p>
+        <img src="img/tambah-overlay.jpg" alt="Contoh Gambar">
+
+        <p>9. Sesuaikan frame dan tata letak Overlay</p>
+        <img src="img/sesuaikan-overlay.jpg" alt="Contoh Gambar">
+
+        <p>10. Ekspor Video</p>
+        <img src="img/ekspor-video.jpg" alt="Contoh Gambar">
+        <p>11. Video siap dibagikan</p>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- Tombol Edit -->
@@ -140,15 +170,11 @@
         
     </div>
     <button id="download-image" class="save-button" style="margin-top: 5px;">Zip</button>
+
+
 <script src="js/jquery-3.7.1.min.js"></script>
 <script src="js/html2canvas.min.js"></script>
 <script src="js/FileSaver.min.js"></script>
 <script src="js/script.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
-
-  <script>
-
-
-    
-  </script>
