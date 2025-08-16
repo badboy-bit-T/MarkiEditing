@@ -357,6 +357,6 @@ $(document).ready(function () {
         if($(e.target).is("#popupOverlayInstruksi")){
           $("#popupOverlayInstruksi").fadeOut(300);
           $('.navbar-bottom, .upload-label, #download-image').show();
-        }
+        } 
       });
 });
