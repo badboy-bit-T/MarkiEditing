@@ -28,12 +28,14 @@
 .datetime {
   font-weight: 900;
   font-size: 32px; /* atur sesuai kebutuhan */
+     margin-left: 2px;
+  /*
     text-shadow:
     0.5px 0 #E1E7FD,
     -0.5px 0 #E1E7FD,
     0 0.5px #E1E7FD,
-    0 -0.5px #E1E7FD; /* efek tebal tanpa blur */
-    margin-left: 2px;
+    0 -0.5px #E1E7FD;
+  */
 
   /* Rapiin jarak huruf */
 
@@ -103,10 +105,10 @@ body {
       flex-grow: 1;
       flex-shrink: 1;
       font-weight: 900;      color: #E1E7FD;
-            text-shadow: 0.25px 0 #fff,
-    -0.18px 0 #fff,
-    0 0.18px #fff,
-    0 -0.18px #fff;
+            text-shadow: 0.25px 0 #E1E7FD,
+    -0.18px 0 #E1E7FD,
+    0 0.18px #E1E7FD,
+    0 -0.18px #E1E7FD;
     letter-spacing: 0.05px;
   
     }
@@ -234,7 +236,7 @@ h1,h2,h3,h4{
     }
     .title {
       padding: 5px 5px;
-      font-size: 20px;
+      font-size: 19px;
     text-shadow:
     0.25px 0 #fff,
     -0.25px 0 #fff,
