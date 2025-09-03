@@ -30,6 +30,8 @@ body,html, .rmin {
 }
 .my-bg {
     background: linear-gradient(35deg, #0a0a0a 0%, #0d1b2a 50%, #1b263b 100%);
+    backface-visibility: hidden;
+    background-repeat: no-repeat;
     color: #fff;
 }
 #nav-bottom {
