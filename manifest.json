@@ -3,7 +3,7 @@
   "short_name": "Patroli",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#000000",
   "theme_color": "#0a3d62",
   "orientation": "portrait",
   "icons": [
