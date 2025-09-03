@@ -147,6 +147,18 @@ function c2sc(isi) {
         return `<span class="${className}">${char}</span>`;
     });
 }
+
+    function getFormData() {
+        return {
+            time: $('#input-time').val() || '00:00',
+            date: $('#input-date').val() || '2000-01-01',
+            day: $('#input-day').val() || 'Hari',
+            location: c2sc($('#input-location').val()) || 'Jalan Tanpa Nama',
+            handler: c2sc($('#input-handler').val())|| c2sc('Petugas Patroli')
+        };
+    }
+
+
 function updateMarkiBoxContent($box, options = {}) {
     if (options.time) {
         const [jam,
