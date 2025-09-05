@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="icon" type="image/png" href="img/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+    <link rel="shortcut icon" href="img/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="TimeStamp" />
+    <!-- <link rel="manifest" href="img/site.webmanifest" /> -->
+    <link rel="manifest" href="manifest.json">
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("service-worker.js");
+            });
+        }
+    </script>
+
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>Centeng App</title>
+    <!-- Bootstrap dulu -->
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="assets/css/style.css">
+
+
+</head>
+<body class="my-bg">
+    <div id='template'>
+        <label for="edit-button" class="marki-box">
+            <div class="column-i">
+                <!-- Section Title -->
+                <div class="row-i section-bg">
+                    <div class="logo">
+                        <img src="assets/img/water_default_logo.png" alt="logo">
+                    </div>
+                    <div class="title-i">
+                        <span class="c2sc marginC2sc">P</span>atroli Keamanan
+                    </div>
+                </div>
+                <!-- Time and Date -->
+                <div class="row-i" style="margin: 0">
+                    <div class="datetime">
+                        <div class="row-i">
+                            <b class="jam">04</b>
+                            <span class="titik2"><b></b><b></b></span>
+                            <b class="menit">30</b>
+                        </div>
+                    </div>
+                    <div style="width: 4.59px; height: 38px; background: #E1E7FD; margin: 0 8px;"></div>
+                    <div class="column-i small-text">
+                        <div class="tanggal-ini">
+                            03-07-2025
+                        </div>
+                        <div class="hari-ini">
+                            Kamis
+                        </div>
+                    </div>
+                </div>
+                <div class="px-1">
+                    <!-- Location -->
+                    <div class="row-i location-section">
+                        <img class="icon-i" src="assets/img/water_icon_anchor.png" alt="Lokasi">
+                        <div class="location-view">
+                            Jalan Tanpa Nama
+                        </div>
+                    </div>
+
+                    <!-- Handler -->
+                    <div class="row-i handler-section" style="display: none">
+                        <img class="icon-i" src="assets/img/water_icon_handler.png" alt="Handler">
+                        <div class="note-view">
+                            <span class="c2sc marginC2sc">P</span>etugas&nbsp;<span class="c2sc marginC2sc">P</span>atroli
+                        </div>
+                    </div>
+
+                    <!-- Validated -->
+                    <div class="validated-section row-i">
+                        <img class="validated-icon" src="assets/img/water_icon_validated.png" alt="Validated">
+                        <div class="validated-text-i">
+                            Waktu & lokasi diverifikasi oleh <span class="c2sc" style="padding-left: 1px">M</span>arki
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </label>
+    </div>
+
+    <!-- Nav bottom -->
+    <div id="nav-bottom" class="text-white">
+        <div id="output-upload" style="display:none;" class="mb-4">
+            <div>
+                <div id="slider-container">
+                    <div id="output-container" class="slider-wrapper p-2"></div>
+                </div>
+                <div class="text-center">
+                        <span id='prev-btn' class="btn btn-sm btn-dark mx-2"><</span><span id="indicate1"></span><span id='next-btn' class="btn btn-sm btn-dark mx-2">></span>
+
+                    </div>
+                </div>
+                <div class="container my-3" id="tools-ukuran">
+                    <label for="customRange3" class="form-label text-white">Scale ukuran</label>
+                    <input type="range" class="form-range mb-4" min="50" max="100" step="3" id="customRange3" value="100">
+                </div>
+            </div>
+            <div class="container mb-3">
+                <input type="file" id="upload" class="d-none" accept="image/*" multiple />
+                <label for="upload" class="btn btn-outline-light w-100">
+                    <i class="fa-solid fa-upload"></i> Unggah Gambar
+                </label>
+            </div>
+
+
+        </div>
+
+        <!-- Menu Gear -->
+        <div id="popup-edit" class="rmin">
+            <div id="form-input">
+                <div class="form-group mb-3">
+                    <label class="form-label-c">Jam:</label>
+                    <input class=" form-control border-top-0 text-white bg-transparent" type="time" id="input-time" value="00:00" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label-c">Tanggal:</label>
+
+                    <input class=" form-control border-top-0 text-white bg-transparent" type="date" id="input-date" value="0000-00-00" />
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label-c">Hari:</label>
+
+                    <input class=" form-control border-top-0 text-white bg-transparent" type="text" id="input-day" readonly />
+
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label-c">Lokasi:</label>
+                    <input class=" form-control border-top-0 text-white bg-transparent" type="text" id="input-location" placeholder="Lokasi Patroli" value="Jalan Tanpa Nama" />
+
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label-c">
+                        Nama Petugas:</label>
+
+                    <input class=" form-control border-top-0 border-b border-light border-1 text-white bg-transparent" type="text" id="input-handler" placeholder="Nama Petugas" value="Petugas Patroli" />
+                </div>
+                <div class="form-group mb-3">
+                    &nbsp;<input type="checkbox" name="hidePetugas" id="hidePetugas" value="uncheck" checked="check" />
+                    <label for="hidePetugas">Sembunyikan Nama</label>
+                    <label>
+                        &nbsp;<input class="text-white bg-transparent" type="checkbox" id="toggle-cap-air" />
+                        Tambah Cap Air
+                    </label>
+                </div>
+                <button id="apply-marki" class="btn btn-sm btn-outline-light">Terapkan ke Watermark</button>
+                <button to="#tools" id="cancel-button" class="btn btn-sm btn-outline-light custom-label">Batal</button>
+            </div>
+
+        </div>
+
+
+        <script src="assets/js/html2canvas.min.js"></script>
+        <script src="assets/js/FileSaver.min.js"></script>
+        <script src="js/solid.js" type="text/javascript" charset="utf-8"></script>
+        <script src="assets/js/jquery-3.7.1.js" type="text/javascript" charset="utf-8"></script>
+        <script src="assets/js/script.js" type="text/javascript" charset="utf-8"></script>
+        <script>
+            // toggleClass menu gear saat ikon gear diklik
+
+            $('#tools').on('click', function() {
+                $('#tools').toggleClass('active').toggleClass('rotate-right').toggleClass('rotate-left')
+            });
+
+            $('.custom-label').on('click', function() {
+                let elem = $(this).attr('to')
+                $(elem).click()
+            })
+
+            $(document).ready(function() {
+                $('#customRange3').on('input', function() {
+                    let val = $(this).val();
+                    let scale = val / 100; // ubah jadi 0.2 - 1
+                    $('.marki-box').css('transform', 'scale(' + scale + ',' + scale + ')');
+
+                    $(this).parent().find('label').text("Ukuran "+val+"%")
+                    $('#tools').toggleClass('active').toggleClass('rotate-right').toggleClass('rotate-left')
+                });
+            });
+        </script>
+    </body>
+</html>
