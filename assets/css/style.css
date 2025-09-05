@@ -33,12 +33,10 @@ body,html, .rmin {
     height: auto;
 
 }
-.my-bg, body {
+.my-bg {
     background: linear-gradient(35deg, #0a0a0a 0%, #0d1b2a 50%, #1b263b 100%);
     backface-visibility: hidden;
     background-repeat: no-repeat;
-    background-attachment: center;
-    background-size: cover;
 }
     .space-beetwen-i {
 
@@ -651,4 +649,4 @@ border-radius: 5px;
 padding: 4px 8px;
 cursor: pointer;
 font-size: 12px;
-    }
+}
