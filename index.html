@@ -24,6 +24,7 @@
     <!-- Bootstrap dulu -->
     <link rel="stylesheet" href="assets/css/bootstrap.css">
     <!-- Font Awesome -->
+    <link href="font/css/all.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="assets/css/style.css">
 
@@ -164,10 +165,15 @@
 
         <script src="assets/js/html2canvas.min.js"></script>
         <script src="assets/js/FileSaver.min.js"></script>
+        <script src="js/solid.js" type="text/javascript" charset="utf-8"></script>
         <script src="assets/js/jquery-3.7.1.js" type="text/javascript" charset="utf-8"></script>
         <script src="assets/js/script.js" type="text/javascript" charset="utf-8"></script>
         <script>
- 
+            // toggleClass menu gear saat ikon gear diklik
+
+            $('#tools').on('click', function() {
+                $('#tools').toggleClass('active').toggleClass('rotate-right').toggleClass('rotate-left')
+            });
 
             $('.custom-label').on('click', function() {
                 let elem = $(this).attr('to')
@@ -186,4 +192,4 @@
             });
         </script>
     </body>
-                                                                                                                 </html>
+</html>
