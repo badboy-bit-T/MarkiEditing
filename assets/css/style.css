@@ -36,17 +36,15 @@ body,html, .rmin {
 .my-bg {
     background: linear-gradient(35deg, #0a0a0a 0%, #0d1b2a 50%, #1b263b 100%);
     backface-visibility: hidden;
-    backllground-repeat: no-repeat;
+    background-repeat: no-repeat;
 }
     .space-beetwen-i {
 
     height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: space-between;
+    justify-content: space-between;
     padding: 1rem;
-
-
 }
 
 
@@ -55,14 +53,14 @@ body,html, .rmin {
     padding: 20px;
     color: #fff;
 }
-}
+
 #nav-bottom {
 position: fixed;
 left: 0;
 right: 0;
 bottom: 0;
 box-shadow: 0 0.5rem 1rem rgba(255, 255, 255, 0.6) !important;
-z-index: 1.01;
+z-index: 1;
 overflow: scroll;
 }
 .hidden { 
@@ -651,4 +649,4 @@ border-radius: 5px;
 padding: 4px 8px;
 cursor: pointer;
 font-size: 12px;
-}
+    }
